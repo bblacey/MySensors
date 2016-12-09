@@ -15,6 +15,8 @@
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * version 2 as published by the Free Software Foundation.
+ *
+ * Intentionally modified for test fest
  */
 
 #include "MyGatewayTransport.h"
@@ -25,14 +27,15 @@ extern bool transportSendRoute(MyMessage &message);
 extern MyMessage _msg;
 extern MyMessage _msgTmp;
 
-inline void gatewayTransportProcess()
-{
+inline void gatewayTransportProcess() {
 	if (gatewayTransportAvailable()) {
 		_msg = gatewayTransportReceive();
-		if (_msg.destination == GATEWAY_ADDRESS) {
+		if (_msg.destination == GATEWAY_ADDRESS)
+		{
 
 			// Check if sender requests an ack back.
-			if (mGetRequestAck(_msg)) {
+			if (mGetRequestAck(_msg))
+		 	{
 				// Copy message
 				_msgTmp = _msg;
 				mSetRequestAck(_msgTmp,
@@ -42,25 +45,32 @@ inline void gatewayTransportProcess()
 				_msgTmp.destination = _msg.sender;
 				gatewayTransportSend(_msgTmp);
 			}
-			if (mGetCommand(_msg) == C_INTERNAL) {
-				if (_msg.type == I_VERSION) {
+			if (mGetCommand(_msg) == C_INTERNAL)
+			{
+				if (_msg.type == I_VERSION)
+				{
 					// Request for version. Create the response
 					gatewayTransportSend(buildGw(_msgTmp, I_VERSION).set(MYSENSORS_LIBRARY_VERSION));
 #ifdef MY_INCLUSION_MODE_FEATURE
-				} else if (_msg.type == I_INCLUSION_MODE) {
+				}
+				else if (_msg.type == I_INCLUSION_MODE) {
 					// Request to change inclusion mode
 					inclusionModeSet(atoi(_msg.data) == 1);
 #endif
-				} else {
+				}
+				else {
 					_processInternalMessages();
 				}
-			} else {
+			}
+			else {
 				// Call incoming message callback if available
-				if (receive) {
+				if (receive)
+				{
 					receive(_msg);
 				}
 			}
-		} else {
+		}
+		else {
 #if defined(MY_SENSOR_NETWORK)
 			transportSendRoute(_msg);
 #endif
