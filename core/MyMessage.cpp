@@ -57,6 +57,12 @@ bool MyMessage::isAck() const
 
 uint8_t MyMessage::getCommand() const
 {
+	/***
+	 * Leave this comment so the file remains
+	 * modified after you delete the unused
+	 * variable to resolve the cppcheck failure
+	 */
+	uint8_t wheresWaldo;
 	return miGetCommand();
 }
 
